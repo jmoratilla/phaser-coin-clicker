@@ -42,7 +42,9 @@ export class ClickerGame extends Scene
         const y = Phaser.Math.Between(0, -400);
 
         const coin = this.physics.add.sprite(x, y, 'coin').play('rotate');
-
+        
+        // Experiment: Set coin color to red
+        coin.setTintFill(0xff0000);
         coin.setVelocityX(Phaser.Math.Between(-400, 400));
         coin.setCollideWorldBounds(true);
         coin.setBounce(0.9);
