@@ -59,6 +59,10 @@ export class ClickerGame extends Scene
         //  Play the 'vanish' animation
         coin.play('vanish');
 
+        // Play the 'coin' sound
+        this.sound.play('coin');
+
+
         coin.once('animationcomplete-vanish', () => coin.destroy());
 
         //  Add 1 to the score
