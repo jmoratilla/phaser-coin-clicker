@@ -9,6 +9,8 @@ export class GameOver extends Scene
 
     create ()
     {
+        var music = this.sound.get('soundtrack');
+
         //  Get the current highscore from the registry
         const score = this.registry.get('highscore');
 
@@ -20,6 +22,7 @@ export class GameOver extends Scene
 
         this.input.once('pointerdown', () => {
 
+            music.stop();
             this.scene.start('MainMenu');
 
         });

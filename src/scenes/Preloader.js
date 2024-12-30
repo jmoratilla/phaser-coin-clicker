@@ -38,6 +38,9 @@ export class Preloader extends Scene
 
         // Load the sound of each clicked coin
         this.load.audio('coin', 'sounds/coin.wav');
+
+        // Load the soundtrack
+        this.load.audio('soundtrack', 'sounds/coins_soundtrack.mp3');
     }
 
     create ()

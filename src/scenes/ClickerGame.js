@@ -13,6 +13,9 @@ export class ClickerGame extends Scene
 
         this.coins = [];
 
+        var music = this.sound.get('soundtrack');
+        music.play();
+
         const textStyle = { fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff', stroke: '#000000', strokeThickness: 8 };
 
         this.add.image(512, 384, 'background');

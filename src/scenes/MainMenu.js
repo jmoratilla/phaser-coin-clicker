@@ -9,6 +9,11 @@ export class MainMenu extends Scene
 
     create ()
     {
+        var music = this.sound.add('soundtrack');
+        if (music.isPlaying) {
+            music.stop()
+        }
+
         //  Get the current highscore from the registry
         const score = this.registry.get('highscore');
 
