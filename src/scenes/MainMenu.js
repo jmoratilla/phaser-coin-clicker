@@ -29,6 +29,7 @@ export class MainMenu extends Scene
             duration: 1000,
             ease: 'Bounce'
         });
+        this.sound.play('red_coin');
 
         this.add.text(32, 32, `High Score: ${score}`, textStyle);
 

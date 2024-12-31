@@ -30,21 +30,32 @@ export class ClickerGame extends Scene
 
         for (let i = 0; i < 32; i++)
         {
-            this.dropCoin();
+            let type = "normal";
+            if (Phaser.Math.Between(0,9) == 1) {
+                type = "red";
+            }
+            this.dropCoin(type);
         }
 
         this.input.on('gameobjectdown', (pointer, gameObject) => this.clickCoin(gameObject));
     }
 
-    dropCoin ()
+    dropCoin (type)
     {
         const x = Phaser.Math.Between(128, 896);
         const y = Phaser.Math.Between(0, -400);
 
         const coin = this.physics.add.sprite(x, y, 'coin').play('rotate');
-        
-        // Experiment: Set coin color to red
-        coin.setTintFill(0xff0000);
+        coin.setDataEnabled();
+        coin.setData('value', 1);
+        coin.setData('sound', 'coin');
+
+        if (type == "red") {
+            coin.setTint(0xf0a1a1); // Red coin
+            coin.setData('value', 5);
+            coin.setData('sound', 'red_coin');
+        }
+
         coin.setVelocityX(Phaser.Math.Between(-400, 400));
         coin.setCollideWorldBounds(true);
         coin.setBounce(0.9);
@@ -65,13 +76,13 @@ export class ClickerGame extends Scene
         coin.play('vanish');
 
         // Play the 'coin' sound
-        this.sound.play('coin');
+        this.sound.play(coin.getData('sound'));
 
 
         coin.once('animationcomplete-vanish', () => coin.destroy());
 
         //  Add 1 to the score
-        this.score++;
+        this.score+=coin.getData('value');
 
         //  Update the score text
         this.scoreText.setText('Coins: ' + this.score);
