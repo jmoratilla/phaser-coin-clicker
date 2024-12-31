@@ -11,6 +11,23 @@ export class GameOver extends Scene
     {
         this.add.image(512, 384, 'background');
 
+        this.add.bitmapText(512, 50, 'arcade', 'Game Over').setOrigin(0.5);
+
+        const length_scores = this.registry.get('high_scores').length;
+
+        if (this.registry.get('score') > this.registry.get('high_scores')[length_scores-1].score) {
+            this.newHighScore();
+        } else {
+            this.add.bitmapText(512, 200, 'arcade', "Sorry, you didn't quite crack the top scores").setOrigin(0.5).setMaxWidth(500);
+            this.toMainMenu();
+        }
+
+
+        
+    }
+
+    newHighScore()
+    {
         // Create the Matrix of Letters
         const chars = [
             [ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J' ],
@@ -19,10 +36,6 @@ export class GameOver extends Scene
         ];
 
         const cursor = {x:0, y:0};
-        let name = '';
-
-        const textStyle = { fontFamily: 'Courier', fontSize: 64, fontStyle: 'Bold', color: '#ffffff' };
-        this.add.bitmapText(512, 50, 'arcade', 'Game Over').setOrigin(0.5);
 
         const input = this.add.bitmapText(256,100, 'arcade', 'ABCDEFGHIJ\n\nKLMNOPQRST\n\nUVWXYZ.-').setLetterSpacing(20);
         input.setInteractive();
@@ -33,13 +46,11 @@ export class GameOver extends Scene
         const block = this.add.image(input.x - 10, input.y -2, 'block').setOrigin(0);
 
         const legend = this.add.bitmapText(256, 360, 'arcade', 'RANK  SCORE   NAME').setTint(0xff00ff).setOrigin(0);
-        this.add.bitmapText(256, 410, 'arcade', '1ST   50000    ').setTint(0xff0000).setOrigin(0);
-        this.add.bitmapText(256, 460, 'arcade', '2ND   40000    ICE').setTint(0xff8200).setOrigin(0);
-        this.add.bitmapText(256, 510, 'arcade', '3RD   30000    GOS').setTint(0xffff00).setOrigin(0);
-        this.add.bitmapText(256, 560, 'arcade', '4TH   20000    HRE').setTint(0x00ff00).setOrigin(0);
-        this.add.bitmapText(256, 610, 'arcade', '5TH   10000    ETE').setTint(0x00bfff).setOrigin(0);
 
-        const playerText = this.add.bitmapText(736, 410, 'arcade', name).setTint(0xff0000).setOrigin(0);
+        let new_score = {
+            score: this.registry.get('score'),
+            name: ''
+        };
 
         // Controls - Keyboard
         this.input.keyboard.on('keyup', event =>
@@ -84,24 +95,24 @@ export class GameOver extends Scene
                 else if (event.keyCode === 13 || event.keyCode === 32)
                 {
                     //  Enter or Space
-                    if (cursor.x === 9 && cursor.y === 2 && name.length > 0)
+                    if (cursor.x === 9 && cursor.y === 2 && new_score.name.length > 0)
                     {
                         //  Submit
                         this.toMainMenu();
                     }
-                    else if (cursor.x === 8 && cursor.y === 2 && name.length > 0)
+                    else if (cursor.x === 8 && cursor.y === 2 && new_score.name.length > 0)
                     {
                         //  Rub
-                        name = name.substr(0, name.length - 1);
+                        new_score.name = new_score.name.substr(0, new_score.name.length - 1);
     
-                        playerText.text = name;
+                        this.updateScores(new_score);
                     }
-                    else if (name.length < 3)
+                    else if (new_score.name.length < 3)
                     {
                         //  Add
-                        name = name.concat(chars[cursor.y][cursor.x]);
+                        new_score.name = new_score.name.concat(chars[cursor.y][cursor.x]);
     
-                        playerText.text = name;
+                        this.updateScores(new_score);
                     }
                 }
     
@@ -137,51 +148,31 @@ export class GameOver extends Scene
                 block.x = input.x - 10 + (cx * 52);
                 block.y = input.y - 2 + (cy * 64);
     
-                if (char === '<' && name.length > 0)
+                if (char === '<' && new_score.name.length > 0)
                 {
                     //  Rub
-                    name = name.substr(0, name.length - 1);
+                    new_score.name = new_score.name.substr(0, new_score.name.length - 1);
     
-                    playerText.text = name;
+                    this.updateScores(new_score);
                 }
-                else if (char === '>' && name.length > 0)
+                else if (char === '>' && new_score.name.length > 0)
                 {
                     //  Submit
                     this.toMainMenu();
                 }
-                else if (name.length < 3)
+                else if (new_score.name.length < 3)
                 {
                     //  Add
-                    name = name.concat(char);
+                    new_score.name = new_score.name.concat(char);
     
-                    playerText.text = name;
+                    this.updateScores(new_score);
                 }
     
             }, this);
-
-        
-        
-
-        // Old stuff
-        //  Get the current highscore from the registry
-        // const score = this.registry.get('highscore');
-        
-        // const textStyle = { fontFamily: 'Arial Black', fontSize: 64, color: '#ffffff', stroke: '#000000', strokeThickness: 8 };
-        
-        // this.add.image(512, 384, 'background');
-        
-        // this.add.text(512, 300, `Game Over\n\nHigh Score: ${score}`, textStyle).setAlign('center').setOrigin(0.5);
-        
-        // this.input.once('pointerdown', () => {        
-        //     // Stop the music    
-        //     var music = this.sound.get('soundtrack');
-        //     music.stop();
-        //     this.scene.start('MainMenu');
-
-        // });
     }
 
-    toMainMenu() {
+    toMainMenu ()
+    {
         //  Swap to the MainMenu scene after a 2 second delay after pressing the end
         this.time.delayedCall(2000, () => {
             // Stop the music    
@@ -190,4 +181,57 @@ export class GameOver extends Scene
             this.scene.start('MainMenu')
         });
     }
+
+    updateScores (new_score)
+    {
+        // Get the high_scores
+        let high_scores = this.registry.get('high_scores');
+
+        Phaser.Utils.Array.Add(high_scores,new_score);
+        Phaser.Utils.Array.StableSort(high_scores,(a, b) => b.score - a.score);
+
+        this.registry.set('high_scores', high_scores);
+        this.printTable();
+        
+    }
+
+    clearTable()
+    {
+        let posX = 256;
+        let posY = 450;        
+        let high_scores = this.registry.get('high_scores');
+        // Reprint the table
+        console.log("clear the table...")
+        
+        for (let i=0; i< high_scores.length; i++) {
+            let text = '';
+            this.add.bitmapText(posX, posY, 'arcade', text).setTint(cardinals_and_colors[i].color).setOrigin(0);
+            posY+=50;
+        };
+    }
+
+    printTable()
+    {
+        const cardinals_and_colors = [
+            {key: '1ST', color: 0xff0000},
+            {key: '2ND', color: 0xff8200},
+            {key: '3RD', color: 0xffff00},
+            {key: '4TH', color: 0x00ff00},
+            {key: '5TH', color: 0x00bfff}
+        ];
+        
+        let posX = 256;
+        let posY = 450;
+        let high_scores = this.registry.get('high_scores');
+
+        // Reprint the table
+        console.log("reprint the table...")
+        
+        for (let i=0; i< high_scores.length; i++) {
+            let text = cardinals_and_colors[i].key + "      " + Phaser.Utils.String.Pad(high_scores[i].score, 3, "0", 1) + "    " + high_scores[i].name;
+            this.add.bitmapText(posX, posY, 'arcade', text).setTint(cardinals_and_colors[i].color).setOrigin(0);
+            posY+=50;
+        };
+    }
+
 }

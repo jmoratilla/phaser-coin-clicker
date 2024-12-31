@@ -24,7 +24,7 @@ export class ClickerGame extends Scene
         this.timeText = this.add.text(1024 - 32, 32, 'Time: 10', textStyle).setOrigin(1, 0).setDepth(1);
 
         //  Our 10 second timer. It starts automatically when the scene is created.
-        this.timer = this.time.addEvent({ delay: 1000, callback: () => this.gameOver() });
+        this.timer = this.time.addEvent({ delay: 10000, callback: () => this.gameOver() });
 
         this.physics.world.setBounds(0, -400, 1024, 768 + 310);
 
@@ -111,15 +111,10 @@ export class ClickerGame extends Scene
 
         this.input.off('gameobjectdown');
 
-        //  Save our highscore to the registry
-        const highscore = this.registry.get('highscore');
-
-        if (this.score > highscore)
-        {
-            this.registry.set('highscore', this.score);
-        }
-
+        this.registry.set('score', this.score);
+        
         //  Swap to the GameOver scene after a 2 second delay
         this.time.delayedCall(2000, () => this.scene.start('GameOver'));
     }
+
 }

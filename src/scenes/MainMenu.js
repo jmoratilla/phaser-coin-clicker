@@ -15,7 +15,7 @@ export class MainMenu extends Scene
         }
 
         //  Get the current highscore from the registry
-        const score = this.registry.get('highscore');
+        const score = this.registry.get('high_scores')[0].score;
 
         const textStyle = { fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff', stroke: '#000000', strokeThickness: 8 };
 
