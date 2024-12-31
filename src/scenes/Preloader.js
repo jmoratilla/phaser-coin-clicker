@@ -42,6 +42,12 @@ export class Preloader extends Scene
 
         // Load the soundtrack
         this.load.audio('soundtrack', 'sounds/coins_soundtrack.mp3');
+
+        // Load the High Score resources
+        this.load.image('block', 'input/block.png');
+        this.load.image('rub', 'input/rub.png');
+        this.load.image('end', 'input/end.png');
+        this.load.bitmapFont('arcade', 'fonts/arcade.png', 'fonts/arcade.xml');
     }
 
     create ()
