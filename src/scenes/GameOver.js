@@ -16,13 +16,12 @@ export class GameOver extends Scene
         const length_scores = this.registry.get('high_scores').length;
 
         if (this.registry.get('score') > this.registry.get('high_scores')[length_scores-1].score) {
+            this.add.bitmapText(512, 150, 'arcade', "Congratulations!\nYou scored high!").setOrigin(0.5).setMaxWidth(720);
             this.newHighScore();
         } else {
-            this.add.bitmapText(512, 200, 'arcade', "Sorry, you didn't quite crack the top scores").setOrigin(0.5).setMaxWidth(500);
+            this.add.bitmapText(512, 200, 'arcade', "Sorry, you didn't quite crack the top scores").setOrigin(0.5).setMaxWidth(720);
             this.toMainMenu();
         }
-
-
         
     }
 
@@ -37,7 +36,7 @@ export class GameOver extends Scene
 
         const cursor = {x:0, y:0};
 
-        const input = this.add.bitmapText(256,100, 'arcade', 'ABCDEFGHIJ\n\nKLMNOPQRST\n\nUVWXYZ.-').setLetterSpacing(20);
+        const input = this.add.bitmapText(256,200, 'arcade', 'ABCDEFGHIJ\n\nKLMNOPQRST\n\nUVWXYZ.-').setLetterSpacing(20);
         input.setInteractive();
 
         const rub = this.add.image(input.x + 430, input.y + 148, 'rub');
@@ -45,7 +44,7 @@ export class GameOver extends Scene
 
         const block = this.add.image(input.x - 10, input.y -2, 'block').setOrigin(0);
 
-        const legend = this.add.bitmapText(256, 360, 'arcade', 'RANK  SCORE   NAME').setTint(0xff00ff).setOrigin(0);
+        const legend = this.add.bitmapText(256, 400, 'arcade', 'RANK  SCORE   NAME').setTint(0xff00ff).setOrigin(0);
 
         let new_score = {
             score: this.registry.get('score'),
@@ -198,7 +197,7 @@ export class GameOver extends Scene
     clearTable()
     {
         let posX = 256;
-        let posY = 450;        
+        let posY = 550;        
         let high_scores = this.registry.get('high_scores');
         // Reprint the table
         console.log("clear the table...")
