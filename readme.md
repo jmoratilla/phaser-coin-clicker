@@ -14,7 +14,7 @@ This is a simple coin clicker game. The goal is to click the coin as many times 
 
 ## Attributions
 
-The game idea and images are owned by Phaser.io.
+The game idea and images are owned by [Phaser.io](https://phaser.io).
 
 ### About sound effects
 
